@@ -1,58 +1,66 @@
 # Petal 🌹 — Rose, Bud & Thorn
 
-A shareable daily check-in app for you and your friends.
+A native mobile app (iOS + Android) for sharing daily check-ins with your friends.
 
 - **Rose** — something good that happened
 - **Bud** — something you're looking forward to
 - **Thorn** — something that was tough
 
-No accounts. Just enter your name and post.
+No accounts. Just enter your name and start posting. Real-time feed so everyone sees each other's updates instantly.
+
+Built with **Expo (React Native)** + **Firebase Firestore**.
 
 ---
 
 ## Setup
 
-### 1. Create a Firebase project
+### 1. Firebase
 
-1. Go to [console.firebase.google.com](https://console.firebase.google.com)
-2. Click **Add project** → name it `petal-app` (or whatever)
-3. Disable Google Analytics if you want (not needed)
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) → **Add project**
+2. Enable **Firestore Database** (production mode, pick a region)
+3. Go to **Project Settings → Your apps → web icon (`</>`)** → register an app → copy the config
+4. Paste your config values into `src/lib/firebase.js`
+5. Deploy Firestore rules: `firebase deploy --only firestore:rules`
 
-### 2. Enable Firestore
+### 2. Install & run
 
-1. In the Firebase console → **Build → Firestore Database**
-2. Click **Create database** → Start in **production mode** → pick a region
-3. The security rules are already in `firestore.rules` — deploy them in step 4
-
-### 3. Add your Firebase config to app.js
-
-1. In Firebase console → **Project Settings → General → Your apps**
-2. Click the web icon (`</>`) → register your app
-3. Copy the `firebaseConfig` object values into `app.js` where it says `REPLACE_WITH_YOUR_...`
-
-### 4. Deploy
-
-Install Firebase CLI (one time):
 ```bash
-npm install -g firebase-tools
-firebase login
+npm install
+npx expo start
 ```
 
-Deploy:
-```bash
-cd rose-bud-thorn-app
-firebase init    # select Hosting + Firestore, pick your project
-firebase deploy
-```
+Scan the QR code in the **Expo Go** app on your phone. Done.
 
-Firebase will give you a URL like `https://your-project.web.app` — share that link with your friends.
+### 3. Share with friends (free, no app store)
 
-### 5. Share
+1. Push your code to GitHub
+2. Tell your friends to install **Expo Go** (free on App Store / Google Play)
+3. Share your QR code or run `npx expo start --tunnel` and share the tunnel URL
 
-Send your friends the `web.app` URL. They open it, enter their name, and can start posting. Works on mobile — they can add it to their home screen like an app.
+Friends open the QR link in Expo Go and the app loads instantly.
 
 ---
 
-## Hosting cost
+## Build a real APK (Android sideload)
 
-Free on Firebase Spark plan. For a small friend group this will never hit the limits (50K reads/day, 20K writes/day).
+If you want an APK file friends can install directly without Expo Go:
+
+```bash
+npm install -g eas-cli
+eas login
+eas build:configure
+eas build -p android --profile preview
+```
+
+EAS gives you a download link for the APK. Share it, friends tap to install.
+(Free tier: 30 builds/month)
+
+---
+
+## Firestore rules
+
+The `firestore.rules` file restricts posts so:
+- Anyone with the link can read and create
+- No one can edit or delete after posting
+
+Deploy with: `firebase deploy --only firestore:rules`
