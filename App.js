@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeProvider } from './src/lib/ThemeContext';
+import { light } from './src/lib/ThemeContext';
 
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import FeedScreen    from './src/screens/FeedScreen';
-import { colors }   from './src/theme';
 
 const NAME_KEY = 'petal_display_name';
 
-export default function App() {
+function Root() {
   const [userName, setUserName] = useState(null);
   const [loading, setLoading]   = useState(true);
 
@@ -31,15 +32,20 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.rose} />
+      <View style={{ flex: 1, backgroundColor: light.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color={light.rose} />
       </View>
     );
   }
 
-  if (!userName) {
-    return <WelcomeScreen onSetName={handleSetName} />;
-  }
-
+  if (!userName) return <WelcomeScreen onSetName={handleSetName} />;
   return <FeedScreen userName={userName} onChangeName={handleClearName} />;
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Root />
+    </ThemeProvider>
+  );
 }

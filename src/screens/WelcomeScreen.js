@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
+  View, Text, TextInput, TouchableOpacity,
+  StyleSheet, KeyboardAvoidingView, Platform, StatusBar,
 } from 'react-native';
-import { colors } from '../theme';
+import { useTheme } from '../lib/ThemeContext';
 
 export default function WelcomeScreen({ onSetName }) {
+  const { colors, isDim } = useTheme();
   const [name, setName]   = useState('');
   const [error, setError] = useState('');
 
@@ -23,19 +18,19 @@ export default function WelcomeScreen({ onSetName }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      style={{ flex: 1, backgroundColor: colors.bg }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle={isDim ? 'light-content' : 'dark-content'} />
       <View style={styles.container}>
         <Text style={styles.emoji}>🌹</Text>
-        <Text style={styles.title}>Petal</Text>
-        <Text style={styles.tagline}>
+        <Text style={[styles.title, { color: colors.rose }]}>Petal</Text>
+        <Text style={[styles.tagline, { color: colors.muted }]}>
           Share your rose, bud & thorn{'\n'}with the people you care about.
         </Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
           placeholder="What should we call you?"
           placeholderTextColor={colors.muted}
           value={name}
@@ -47,9 +42,9 @@ export default function WelcomeScreen({ onSetName }) {
           autoCapitalize="words"
         />
 
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={[styles.error, { color: colors.rose }]}>{error}</Text> : null}
 
-        <TouchableOpacity style={styles.btn} onPress={handleContinue} activeOpacity={0.85}>
+        <TouchableOpacity style={[styles.btn, { backgroundColor: colors.rose }]} onPress={handleContinue} activeOpacity={0.85}>
           <Text style={styles.btnText}>Let's go →</Text>
         </TouchableOpacity>
       </View>
@@ -58,61 +53,20 @@ export default function WelcomeScreen({ onSetName }) {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.bg,
-  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
   },
-  emoji: {
-    fontSize: 72,
-    marginBottom: 12,
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: '700',
-    color: colors.rose,
-    letterSpacing: -1,
-    marginBottom: 10,
-  },
-  tagline: {
-    color: colors.muted,
-    fontSize: 15,
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 40,
-  },
+  emoji:   { fontSize: 64, marginBottom: 12 },
+  title:   { fontSize: 42, fontWeight: '700', letterSpacing: -1, marginBottom: 10 },
+  tagline: { fontSize: 15, textAlign: 'center', lineHeight: 24, marginBottom: 40 },
   input: {
-    width: '100%',
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 14,
-    color: colors.text,
-    fontSize: 16,
-    padding: 16,
-    marginBottom: 12,
+    width: '100%', borderWidth: 1.5, borderRadius: 14,
+    fontSize: 16, padding: 16, marginBottom: 12,
   },
-  error: {
-    color: '#ff6b6b',
-    fontSize: 13,
-    marginBottom: 10,
-    alignSelf: 'flex-start',
-  },
-  btn: {
-    width: '100%',
-    backgroundColor: colors.rose,
-    borderRadius: 14,
-    padding: 16,
-    alignItems: 'center',
-  },
-  btnText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 16,
-  },
+  error:   { fontSize: 13, marginBottom: 10, alignSelf: 'flex-start' },
+  btn:     { width: '100%', borderRadius: 14, padding: 16, alignItems: 'center' },
+  btnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
 });
