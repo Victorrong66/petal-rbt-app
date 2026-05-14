@@ -9,20 +9,16 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../theme';
 
-const NAME_KEY = 'petal_display_name';
-
-export default function WelcomeScreen({ navigation }) {
-  const [name, setName] = useState('');
+export default function WelcomeScreen({ onSetName }) {
+  const [name, setName]   = useState('');
   const [error, setError] = useState('');
 
-  async function handleContinue() {
+  function handleContinue() {
     const trimmed = name.trim();
     if (!trimmed) { setError('Enter your name first.'); return; }
-    await AsyncStorage.setItem(NAME_KEY, trimmed);
-    navigation.replace('Feed', { userName: trimmed });
+    onSetName(trimmed);
   }
 
   return (

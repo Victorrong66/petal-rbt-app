@@ -10,19 +10,15 @@ import {
   Alert,
 } from 'react-native';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { db } from '../lib/firebase';
 import PostCard from '../components/PostCard';
 import PostModal from '../components/PostModal';
 import { colors } from '../theme';
 
-const NAME_KEY = 'petal_display_name';
-
-export default function FeedScreen({ route, navigation }) {
+export default function FeedScreen({ userName, onChangeName }) {
   const [posts, setPosts]         = useState([]);
   const [loading, setLoading]     = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const userName = route.params?.userName || '';
 
   useEffect(() => {
     const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
@@ -43,13 +39,7 @@ export default function FeedScreen({ route, navigation }) {
   function handleChangeName() {
     Alert.alert('Change name', 'This will take you back to the start.', [
       { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Change',
-        onPress: async () => {
-          await AsyncStorage.removeItem(NAME_KEY);
-          navigation.replace('Welcome');
-        },
-      },
+      { text: 'Change', onPress: onChangeName },
     ]);
   }
 
@@ -62,7 +52,6 @@ export default function FeedScreen({ route, navigation }) {
     <SafeAreaView style={styles.root}>
       <StatusBar barStyle="light-content" />
 
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerLogo}>🌹 Petal</Text>
         <View style={styles.headerRight}>
@@ -70,12 +59,11 @@ export default function FeedScreen({ route, navigation }) {
             <Text style={styles.postBtnText}>+ Post</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleChangeName} style={styles.nameBtn}>
-            <Text style={styles.nameBtnText}>{userName}</Text>
+            <Text style={styles.nameBtnText} numberOfLines={1}>{userName}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Feed */}
       <FlatList
         data={posts}
         keyExtractor={item => item.id}
@@ -136,11 +124,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 8,
+    maxWidth: 90,
   },
   nameBtnText: {
     color: colors.muted,
     fontSize: 13,
-    maxWidth: 80,
   },
   list: {
     padding: 16,
