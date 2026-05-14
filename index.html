@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petal — Rose, Bud & Thorn</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <meta name="theme-color" content="#0f0a0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Name setup screen -->
+  <div id="auth-screen" class="screen">
+    <div class="auth-container">
+      <div class="logo">🌹</div>
+      <h1>Petal</h1>
+      <p class="tagline">Share your rose, bud & thorn with the people you care about.</p>
+      <div class="name-form">
+        <input
+          id="name-input"
+          type="text"
+          placeholder="What should we call you?"
+          maxlength="40"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        />
+        <button id="name-submit-btn" class="btn btn-primary btn-full">Let's go →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app-screen" class="screen hidden">
+
+    <header>
+      <div class="header-inner">
+        <span class="header-logo">🌹 Petal</span>
+        <div class="header-actions">
+          <button id="new-post-btn" class="btn btn-primary">+ Post</button>
+          <button id="signout-btn" class="btn btn-ghost">Change name</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="feed">
+      <div id="feed-loading" class="feed-state">Loading posts...</div>
+      <div id="feed-empty" class="feed-state hidden">No posts yet. Be the first! 🌹</div>
+      <div id="posts-container"></div>
+    </main>
+
+  </div>
+
+  <!-- New Post Modal -->
+  <div id="post-modal" class="modal hidden">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Today's Check-in</h2>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+
+      <div class="field rose-field">
+        <label>
+          <span class="field-icon">🌹</span>
+          <span class="field-label">Rose</span>
+          <span class="field-hint">Something good that happened</span>
+        </label>
+        <textarea id="rose-input" placeholder="What was your highlight?" rows="3"></textarea>
+      </div>
+
+      <div class="field bud-field">
+        <label>
+          <span class="field-icon">🌱</span>
+          <span class="field-label">Bud</span>
+          <span class="field-hint">Something you're looking forward to</span>
+        </label>
+        <textarea id="bud-input" placeholder="What are you excited about?" rows="3"></textarea>
+      </div>
+
+      <div class="field thorn-field">
+        <label>
+          <span class="field-icon">🥀</span>
+          <span class="field-label">Thorn</span>
+          <span class="field-hint">Something that was tough</span>
+        </label>
+        <textarea id="thorn-input" placeholder="What was your challenge?" rows="3"></textarea>
+      </div>
+
+      <button id="submit-post-btn" class="btn btn-primary btn-full">Share with your crew</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

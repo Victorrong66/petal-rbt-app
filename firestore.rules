@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /posts/{postId} {
+      // Anyone with the link can read and create posts.
+      // No one can edit or delete posts after creation.
+      allow read:   if true;
+      allow create: if request.resource.data.keys().hasAll(["name", "createdAt"])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 40;
+      allow update, delete: if false;
+    }
+  }
+}
